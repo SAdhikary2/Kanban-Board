@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { MdEditDocument, MdDelete } from "react-icons/md";
 
 const Task = ({ task, onEdit, onDelete, onDragStart }) => {
+  
   return (
     <div
       className="bg-indigo-600 text-white p-4 rounded shadow mb-2"
