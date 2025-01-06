@@ -2,6 +2,20 @@ import PropTypes from "prop-types";
 import Task from "./Task";
 
 const Column = ({ title, tasks, onTaskDrop, onEdit, onDelete }) => {
+  // Track touch movement for mobile drag-and-drop
+  const handleTouchStart = (e, taskId) => {
+    e.dataTransfer = { taskId }; 
+  };
+
+  const handleTouchMove = (e) => e.preventDefault(); 
+
+  const handleTouchEnd = (e) => {
+    const taskId = e.dataTransfer?.taskId;
+    if (taskId) {
+      onTaskDrop(taskId, title);
+    }
+  };
+
   const handleDragOver = (e) => e.preventDefault();
 
   const handleDrop = (e) => {
@@ -11,9 +25,11 @@ const Column = ({ title, tasks, onTaskDrop, onEdit, onDelete }) => {
 
   return (
     <div
-      className="bg-gray-100  p-4 rounded shadow-md shadow-indigo-600 min-h-[300px]"
+      className="bg-gray-100 p-4 rounded shadow-md shadow-indigo-600 min-h-[300px]"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <h2 className="text-lg font-bold mb-4">{title}</h2>
       <hr className="mb-2 text-2xl" />
@@ -24,6 +40,7 @@ const Column = ({ title, tasks, onTaskDrop, onEdit, onDelete }) => {
           onEdit={onEdit}
           onDelete={onDelete}
           onDragStart={(e, taskId) => e.dataTransfer.setData("taskId", taskId)}
+          onTouchStart={(e) => handleTouchStart(e, task.id)}
         />
       ))}
     </div>
